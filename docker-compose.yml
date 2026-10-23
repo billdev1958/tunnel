@@ -3,11 +3,13 @@
 #   1. Zero Trust > Networks > Tunnels > Create tunnel > Cloudflared > Docker
 #   2. Copia el token a .env  (TUNNEL_TOKEN=eyJ...)
 #   3. docker compose up -d          (crea la red "web")
-#   4. En el panel, pestaña "Public Hostname", agrega:
-#        Subdomain: cms   Domain: ax01.com.mx   Type: HTTP   URL: cms:80
-#        Subdomain: api   Domain: ax01.com.mx   Type: HTTP   URL: api:80
-#        Subdomain: admin Domain: ax01.com.mx   Type: HTTP   URL: admin:80
-#      (URL = nombre del contenedor : puerto interno de la app)
+#   4. En el panel, Routes > Add route > Published application:
+#        cms.ax01.com.mx   -> http://cms:80
+#        api.ax01.com.mx   -> https://nginx:443
+#            TLS > Origin Server Name: api.ax01.com.mx
+#        admin.ax01.com.mx -> https://nginx:443
+#            TLS > Origin Server Name: admin.ax01.com.mx
+#      nginx redirige 80 -> 443, por eso api/admin van al 443 (si no, loop 301).
 #
 # Tus apps (en sus propios docker-compose) deben unirse a la red "web":
 #
@@ -17,15 +19,10 @@
 #       container_name: cms
 #       expose: ["80"]          # sin "ports:", no se publica al host
 #       networks: [web]
-#     api:
-#       image: ...
-#       container_name: api
-#       expose: ["80"]
-#       networks: [web]
-#     admin:
-#       image: ...
-#       container_name: admin
-#       expose: ["80"]
+#     nginx:                    # proxy de api y admin, cert Origin CA
+#       image: nginx
+#       container_name: nginx
+#       expose: ["443"]
 #       networks: [web]
 #   networks:
 #     web:

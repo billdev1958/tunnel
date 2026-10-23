@@ -1,7 +1,9 @@
 # Cloudflare Zero Trust Tunnel - ax01.com.mx
-# Ubicación final en el servidor: /etc/cloudflared/config.yml
 #
-# __TUNNEL_ID__ lo reemplaza install.sh con el UUID real del túnel.
+# Referencia de las rutas del túnel. Con el túnel por token (docker-compose.yml)
+# estas rutas se configuran en el panel (Routes); este archivo no se lee.
+# Los servicios usan nombres de contenedor de la red Docker "web".
+# __TUNNEL_ID__: UUID del túnel, solo si se usa como túnel gestionado localmente.
 
 tunnel: __TUNNEL_ID__
 credentials-file: /etc/cloudflared/__TUNNEL_ID__.json
@@ -21,17 +23,23 @@ originRequest:
   noHappyEyeballs: false
 
 ingress:
-  # CMS
+  # CMS (app independiente, HTTP directo al contenedor)
   - hostname: cms.ax01.com.mx
-    service: http://localhost:80
+    service: http://cms:80
 
-  # API
+  # API y Admin pasan por nginx, que redirige 80 -> 443 y sirve en 443 con
+  # el certificado Origin CA. Apuntar al 80 provocaría un loop de redirección.
+  # originServerName: el cert es *.ax01.com.mx, no "nginx".
   - hostname: api.ax01.com.mx
-    service: http://localhost:80
+    service: https://nginx:443
+    originRequest:
+      originServerName: api.ax01.com.mx
 
   # Admin (protégelo con una Access policy)
   - hostname: admin.ax01.com.mx
-    service: http://localhost:80
+    service: https://nginx:443
+    originRequest:
+      originServerName: admin.ax01.com.mx
 
   # --- Ejemplos: descomenta / ajusta según tus servicios ---
 
