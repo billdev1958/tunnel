@@ -6,6 +6,7 @@
 #   4. En el panel, pestaña "Public Hostname", agrega:
 #        Subdomain: cms   Domain: ax01.com.mx   Type: HTTP   URL: cms:80
 #        Subdomain: api   Domain: ax01.com.mx   Type: HTTP   URL: api:80
+#        Subdomain: admin Domain: ax01.com.mx   Type: HTTP   URL: admin:80
 #      (URL = nombre del contenedor : puerto interno de la app)
 #
 # Tus apps (en sus propios docker-compose) deben unirse a la red "web":
@@ -19,6 +20,11 @@
 #     api:
 #       image: ...
 #       container_name: api
+#       expose: ["80"]
+#       networks: [web]
+#     admin:
+#       image: ...
+#       container_name: admin
 #       expose: ["80"]
 #       networks: [web]
 #   networks:

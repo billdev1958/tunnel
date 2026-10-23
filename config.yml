@@ -29,6 +29,10 @@ ingress:
   - hostname: api.ax01.com.mx
     service: http://localhost:80
 
+  # Admin (protégelo con una Access policy)
+  - hostname: admin.ax01.com.mx
+    service: http://localhost:80
+
   # --- Ejemplos: descomenta / ajusta según tus servicios ---
 
   # Origen HTTPS con certificado autofirmado
