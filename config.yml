@@ -25,11 +25,11 @@ ingress:
   - hostname: cms.ax01.com.mx
     service: http://localhost:80
 
-  # --- Ejemplos: descomenta / ajusta según tus servicios ---
+  # API
+  - hostname: api.ax01.com.mx
+    service: http://localhost:80
 
-  # App o API en otro puerto
-  # - hostname: api.ax01.com.mx
-  #   service: http://localhost:3000
+  # --- Ejemplos: descomenta / ajusta según tus servicios ---
 
   # Origen HTTPS con certificado autofirmado
   # - hostname: panel.ax01.com.mx

@@ -5,7 +5,7 @@ set -euo pipefail
 
 TUNNEL_NAME="${1:-ax01}"
 DOMAIN="ax01.com.mx"
-HOSTNAMES=("cms.ax01.com.mx")   # deben coincidir con el ingress de config.yml
+HOSTNAMES=("cms.ax01.com.mx" "api.ax01.com.mx")   # deben coincidir con el ingress de config.yml
 CONF_DIR="/etc/cloudflared"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
