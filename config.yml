@@ -1,0 +1,48 @@
+# Cloudflare Zero Trust Tunnel - ax01.com.mx
+# Ubicación final en el servidor: /etc/cloudflared/config.yml
+#
+# __TUNNEL_ID__ lo reemplaza install.sh con el UUID real del túnel.
+
+tunnel: __TUNNEL_ID__
+credentials-file: /etc/cloudflared/__TUNNEL_ID__.json
+
+# Métricas locales (útil para monitoreo / healthcheck)
+metrics: 127.0.0.1:20241
+
+# Reintentos y protocolo
+protocol: auto          # quic con fallback a http2
+retries: 5
+grace-period: 30s
+
+originRequest:
+  connectTimeout: 30s
+  tlsTimeout: 10s
+  keepAliveTimeout: 90s
+  noHappyEyeballs: false
+
+ingress:
+  # Sitio principal
+  - hostname: ax01.com.mx
+    service: http://localhost:80
+
+  - hostname: www.ax01.com.mx
+    service: http://localhost:80
+
+  # --- Ejemplos: descomenta / ajusta según tus servicios ---
+
+  # App o API en otro puerto
+  # - hostname: api.ax01.com.mx
+  #   service: http://localhost:3000
+
+  # Origen HTTPS con certificado autofirmado
+  # - hostname: panel.ax01.com.mx
+  #   service: https://localhost:8443
+  #   originRequest:
+  #     noTLSVerify: true
+
+  # SSH vía navegador / cloudflared access (protégelo con una Access policy)
+  # - hostname: ssh.ax01.com.mx
+  #   service: ssh://localhost:22
+
+  # Regla final obligatoria: todo lo demás devuelve 404
+  - service: http_status:404

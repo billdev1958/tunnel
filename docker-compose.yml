@@ -1,0 +1,34 @@
+# Cloudflare Tunnel (Zero Trust) en Docker - ax01.com.mx
+# Uso:
+#   1. Zero Trust > Networks > Tunnels > Create tunnel > Cloudflared > Docker
+#   2. Copia el token a .env  (TUNNEL_TOKEN=eyJ...)
+#   3. docker compose up -d          (crea la red "web")
+#   4. En el panel, pestaña "Public Hostname", agrega las rutas apuntando
+#      al nombre del contenedor de cada app, p.ej. http://miapp:3000
+#
+# Tus apps (en sus propios docker-compose) deben unirse a la red "web":
+#
+#   services:
+#     miapp:
+#       image: ...
+#       container_name: miapp
+#       expose: ["3000"]        # sin "ports:", no se publica al host
+#       networks: [web]
+#   networks:
+#     web:
+#       external: true
+
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    networks:
+      - web
+
+networks:
+  web:
+    name: web
