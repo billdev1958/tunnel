@@ -27,17 +27,17 @@ ingress:
   - hostname: cms.ax01.com.mx
     service: http://cms:80
 
-  # API y Admin pasan por nginx, que redirige 80 -> 443 y sirve en 443 con
+  # API y Admin pasan por el proxy (nginx), que redirige 80 -> 443 y sirve en 443 con
   # el certificado Origin CA. Apuntar al 80 provocaría un loop de redirección.
-  # originServerName: el cert es *.ax01.com.mx, no "nginx".
+  # originServerName: el cert es *.ax01.com.mx, no "proxy".
   - hostname: api.ax01.com.mx
-    service: https://nginx:443
+    service: https://proxy:443
     originRequest:
       originServerName: api.ax01.com.mx
 
   # Admin (protégelo con una Access policy)
   - hostname: admin.ax01.com.mx
-    service: https://nginx:443
+    service: https://proxy:443
     originRequest:
       originServerName: admin.ax01.com.mx
 
