@@ -3,16 +3,17 @@
 #   1. Zero Trust > Networks > Tunnels > Create tunnel > Cloudflared > Docker
 #   2. Copia el token a .env  (TUNNEL_TOKEN=eyJ...)
 #   3. docker compose up -d          (crea la red "web")
-#   4. En el panel, pestaña "Public Hostname", agrega las rutas apuntando
-#      al nombre del contenedor de cada app, p.ej. http://miapp:3000
+#   4. En el panel, pestaña "Public Hostname", agrega:
+#        Subdomain: cms   Domain: ax01.com.mx   Type: HTTP   URL: cms:80
+#      (URL = nombre del contenedor : puerto interno del CMS)
 #
 # Tus apps (en sus propios docker-compose) deben unirse a la red "web":
 #
 #   services:
-#     miapp:
+#     cms:
 #       image: ...
-#       container_name: miapp
-#       expose: ["3000"]        # sin "ports:", no se publica al host
+#       container_name: cms
+#       expose: ["80"]          # sin "ports:", no se publica al host
 #       networks: [web]
 #   networks:
 #     web:

@@ -21,11 +21,8 @@ originRequest:
   noHappyEyeballs: false
 
 ingress:
-  # Sitio principal
-  - hostname: ax01.com.mx
-    service: http://localhost:80
-
-  - hostname: www.ax01.com.mx
+  # CMS
+  - hostname: cms.ax01.com.mx
     service: http://localhost:80
 
   # --- Ejemplos: descomenta / ajusta según tus servicios ---

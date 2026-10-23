@@ -5,7 +5,7 @@ set -euo pipefail
 
 TUNNEL_NAME="${1:-ax01}"
 DOMAIN="ax01.com.mx"
-HOSTNAMES=("ax01.com.mx" "www.ax01.com.mx")   # deben coincidir con el ingress de config.yml
+HOSTNAMES=("cms.ax01.com.mx")   # deben coincidir con el ingress de config.yml
 CONF_DIR="/etc/cloudflared"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
@@ -76,4 +76,4 @@ sleep 3
 systemctl --no-pager status cloudflared | head -n 15
 
 echo
-echo "Listo. Prueba: curl -I https://${DOMAIN}"
+echo "Listo. Prueba: curl -I https://cms.${DOMAIN}"
